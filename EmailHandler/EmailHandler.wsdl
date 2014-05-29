@@ -1,0 +1,30 @@
+<?xml version= '1.0' encoding= 'UTF-8' ?>
+<wsdl:definitions
+     name="EmailHandler"
+     targetNamespace="http://www.gmpvt.net/WSDL/EmailHandler"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:inp1="http://www.gmpvt.net/schema/EmailHandlerInput"
+     xmlns:tns="http://www.gmpvt.net/WSDL/EmailHandler"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://www.gmpvt.net/schema/EmailHandlerInput" schemaLocation="xsd/EmailHandlerInput.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="requestMessage">
+    <wsdl:part name="EmailHandlerInput" element="inp1:emailHandler"/>
+       <!--<wsdl:part name="FromAccountName" element="inp1:emailHandler"/>
+        <wsdl:part name="To" element="inp1:emailHandler"/>
+        <wsdl:part name="ReplyToAddress" element="inp1:emailHandler"/>
+        <wsdl:part name="Subject" element="inp1:emailHandler"/>
+        <wsdl:part name="Content" element="inp1:emailHandler"/>
+        <wsdl:part name="Cc" element="inp1:emailHandler"/>
+        <wsdl:part name="Bcc" element="inp1:emailHandler"/>-->
+    </wsdl:message>
+    <wsdl:portType name="execute_ptt">
+        <wsdl:operation name="execute">
+            <wsdl:input message="tns:requestMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

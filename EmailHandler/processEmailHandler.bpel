@@ -1,0 +1,140 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Fri Jan 17 13:22:37 EST 2014
+  Author:  hutchinson
+  Type: BPEL 2.0 Process
+  Purpose: Empty BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="processEmailHandler"
+               targetNamespace="http://xmlns.oracle.com/CCB/EmailHandler/processEmailHandler"
+               xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+               xmlns:client="http://xmlns.oracle.com/CCB/EmailHandler/processEmailHandler"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:ns1="http://oracle.com/sca/soapservice/CCB/EmailHandler/EmailHandler"
+         xmlns:ns2="http://xmlns.oracle.com/ias/pcbpel/NotificationService"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:ns3="http://www.gmpvt.net/WSDL/EmailHandler"
+         xmlns:ns4="http://www.gmpvt.net/schema/EmailHandlerInput"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap">
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <partnerLinks>
+    <partnerLink name="NotificationService1"
+                 partnerLinkType="ns2:NotificationServiceLink"
+                 partnerRole="NotificationServiceProvider"/>
+    <partnerLink name="EmailHandler" partnerLinkType="ns3:EmailHandler"
+                 myRole="execute_ptt"/>
+  </partnerLinks>
+  <variables>
+    <variable name="ReceiveEmailData_execute_InputVariable"
+              messageType="ns3:requestMessage"/>
+  </variables>
+  <faultHandlers>
+    <catchAll>
+      <exit name="ExitError"/>
+    </catchAll>
+  </faultHandlers>
+  <sequence name="main">
+    <receive name="ReceiveEmailData" createInstance="yes"
+             partnerLink="EmailHandler" portType="ns3:execute_ptt"
+             operation="execute"
+             variable="ReceiveEmailData_execute_InputVariable"/>
+    <scope name="Scope1">
+      <scope name="Email1">
+        <bpelx:annotation>
+          <bpelx:pattern patternName="bpelx:email"/>
+          <bpelx:general>
+            <bpelx:property name="userLabel">email</bpelx:property>
+          </bpelx:general>
+        </bpelx:annotation>
+        <variables>
+          <variable name="varNotificationReq"
+                    messageType="ns2:EmailNotificationRequest"/>
+          <variable name="varNotificationResponse"
+                    messageType="ns2:ArrayOfResponse"/>
+          <variable name="NotificationServiceFaultVariable"
+                    messageType="ns2:NotificationServiceErrorMessage"/>
+        </variables>
+        <sequence name="Sequence1">
+          <assign name="EmailParamsAssign">
+            <copy>
+              <from>string('Default')</from>
+              <to>$varNotificationReq.EmailPayload/ns2:FromAccountName</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:FromAccountName</from>
+              <to>$varNotificationReq.EmailPayload/ns2:FromAccountName</to>
+            </copy>
+            <copy>
+              <from>string('')</from>
+              <to>$varNotificationReq.EmailPayload/ns2:ReplyToAddress</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:ReplyToAddress</from>
+              <to>$varNotificationReq.EmailPayload/ns2:ReplyToAddress</to>
+            </copy>
+            <copy>
+              <from>string('')</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Cc</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Cc</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Cc</to>
+            </copy>
+            <copy>
+              <from>string('')</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Bcc</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Bcc</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Bcc</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:To</from>
+              <to>$varNotificationReq.EmailPayload/ns2:To</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Subject</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Subject</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Content</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Content/ns2:ContentBody</to>
+            </copy>
+            <copy>
+              <from>string('text/html; charset=UTF-8')</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Content/ns2:MimeType</to>
+            </copy>
+          </assign>
+          <invoke name="InvokeNotificationService"
+                  portType="ns2:NotificationService"
+                  partnerLink="NotificationService1"
+                  inputVariable="varNotificationReq"
+                  outputVariable="varNotificationResponse"
+                  operation="sendEmailNotification"/>
+        </sequence>
+      </scope>
+    </scope>
+  </sequence>
+</process>
