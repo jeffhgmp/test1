@@ -5,16 +5,15 @@
    <iconize/>
    <partnerlink_locations>
       <partnerlink name="EmailHandler" x="15" y="90" side="left"/>
-      <partnerlink name="NotificationService1" x="920" y="18" side="right"/>
+      <partnerlink name="NotificationService1" x="1493" y="18" side="right"/>
    </partnerlink_locations>
-   <graph_layout viewport="0,0,1049,676" show_swimlanes="true">
+   <graph_layout viewport="0,0,1622,890" show_swimlanes="true">
       <layout_item collapsed="false" xpath="/process" type="process" showhandlers="true"/>
       <layout_item collapsed="false" xpath="/process/faultHandlers/catchAll" type="catchall"/>
       <layout_item collapsed="false" xpath="/process/sequence" type="sequence"/>
       <layout_item collapsed="false" xpath="/process/sequence/scope" type="scope" showhandlers="true"/>
-      <layout_item collapsed="false" xpath="/process/sequence/scope/sequence" type="sequence"/>
-      <layout_item collapsed="true" xpath="/process/sequence/scope/sequence/scope" type="email" showhandlers="true"/>
-      <layout_item collapsed="false" xpath="/process/sequence/scope/sequence/scope/sequence" type="sequence"/>
+      <layout_item collapsed="true" xpath="/process/sequence/scope/scope" type="email" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope/scope/sequence" type="sequence"/>
    </graph_layout>
    <bookmarks/>
 </graphics>

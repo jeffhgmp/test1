@@ -30,8 +30,7 @@
          xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
          xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
          xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
-         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
-         xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap">
 
   <!-- 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +49,6 @@
   <variables>
     <variable name="ReceiveEmailData_execute_InputVariable"
               messageType="ns3:requestMessage"/>
-    <variable name="dummy" type="xsd:string"/>
   </variables>
   <faultHandlers>
     <catchAll>
@@ -63,88 +61,80 @@
              operation="execute"
              variable="ReceiveEmailData_execute_InputVariable"/>
     <scope name="Scope1">
-      <sequence name="Sequence2">
-        <assign name="Assignnothing">
-          <copy>
-            <from><literal>:)</literal></from>
-            <to>$dummy</to>
-          </copy>
-        </assign>
-        <scope name="Email1">
-          <bpelx:annotation>
-            <bpelx:pattern patternName="bpelx:email"/>
-            <bpelx:general>
-              <bpelx:property name="userLabel">email</bpelx:property>
-            </bpelx:general>
-          </bpelx:annotation>
-          <variables>
-            <variable name="varNotificationReq"
-                      messageType="ns2:EmailNotificationRequest"/>
-            <variable name="varNotificationResponse"
-                      messageType="ns2:ArrayOfResponse"/>
-            <variable name="NotificationServiceFaultVariable"
-                      messageType="ns2:NotificationServiceErrorMessage"/>
-          </variables>
-          <sequence name="Sequence1">
-            <assign name="EmailParamsAssign">
-              <copy>
-                <from>string('Default')</from>
-                <to>$varNotificationReq.EmailPayload/ns2:FromAccountName</to>
-              </copy>
-              <copy>
-                <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:FromAccountName</from>
-                <to>$varNotificationReq.EmailPayload/ns2:FromAccountName</to>
-              </copy>
-              <copy>
-                <from>string('')</from>
-                <to>$varNotificationReq.EmailPayload/ns2:ReplyToAddress</to>
-              </copy>
-              <copy>
-                <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:ReplyToAddress</from>
-                <to>$varNotificationReq.EmailPayload/ns2:ReplyToAddress</to>
-              </copy>
-              <copy>
-                <from>string('')</from>
-                <to>$varNotificationReq.EmailPayload/ns2:Cc</to>
-              </copy>
-              <copy>
-                <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Cc</from>
-                <to>$varNotificationReq.EmailPayload/ns2:Cc</to>
-              </copy>
-              <copy>
-                <from>string('')</from>
-                <to>$varNotificationReq.EmailPayload/ns2:Bcc</to>
-              </copy>
-              <copy>
-                <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Bcc</from>
-                <to>$varNotificationReq.EmailPayload/ns2:Bcc</to>
-              </copy>
-              <copy>
-                <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:To</from>
-                <to>$varNotificationReq.EmailPayload/ns2:To</to>
-              </copy>
-              <copy>
-                <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Subject</from>
-                <to>$varNotificationReq.EmailPayload/ns2:Subject</to>
-              </copy>
-              <copy>
-                <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Content</from>
-                <to>$varNotificationReq.EmailPayload/ns2:Content/ns2:ContentBody</to>
-              </copy>
-              <copy>
-                <from>string('text/html; charset=UTF-8')</from>
-                <to>$varNotificationReq.EmailPayload/ns2:Content/ns2:MimeType</to>
-              </copy>
-            </assign>
-            <invoke name="InvokeNotificationService"
-                    portType="ns2:NotificationService"
-                    partnerLink="NotificationService1"
-                    inputVariable="varNotificationReq"
-                    outputVariable="varNotificationResponse"
-                    operation="sendEmailNotification"/>
-          </sequence>
-        </scope>
-      </sequence>
+      <scope name="Email1">
+        <bpelx:annotation>
+          <bpelx:pattern patternName="bpelx:email"/>
+          <bpelx:general>
+            <bpelx:property name="userLabel">email</bpelx:property>
+          </bpelx:general>
+        </bpelx:annotation>
+        <variables>
+          <variable name="varNotificationReq"
+                    messageType="ns2:EmailNotificationRequest"/>
+          <variable name="varNotificationResponse"
+                    messageType="ns2:ArrayOfResponse"/>
+          <variable name="NotificationServiceFaultVariable"
+                    messageType="ns2:NotificationServiceErrorMessage"/>
+        </variables>
+        <sequence name="Sequence1">
+          <assign name="EmailParamsAssign">
+            <copy>
+              <from>string('Default')</from>
+              <to>$varNotificationReq.EmailPayload/ns2:FromAccountName</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:FromAccountName</from>
+              <to>$varNotificationReq.EmailPayload/ns2:FromAccountName</to>
+            </copy>
+            <copy>
+              <from>string('')</from>
+              <to>$varNotificationReq.EmailPayload/ns2:ReplyToAddress</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:ReplyToAddress</from>
+              <to>$varNotificationReq.EmailPayload/ns2:ReplyToAddress</to>
+            </copy>
+            <copy>
+              <from>string('')</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Cc</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Cc</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Cc</to>
+            </copy>
+            <copy>
+              <from>string('')</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Bcc</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Bcc</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Bcc</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:To</from>
+              <to>$varNotificationReq.EmailPayload/ns2:To</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Subject</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Subject</to>
+            </copy>
+            <copy>
+              <from>$ReceiveEmailData_execute_InputVariable.EmailHandlerInput/ns4:Content</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Content/ns2:ContentBody</to>
+            </copy>
+            <copy>
+              <from>string('text/html; charset=UTF-8')</from>
+              <to>$varNotificationReq.EmailPayload/ns2:Content/ns2:MimeType</to>
+            </copy>
+          </assign>
+          <invoke name="InvokeNotificationService"
+                  portType="ns2:NotificationService"
+                  partnerLink="NotificationService1"
+                  inputVariable="varNotificationReq"
+                  outputVariable="varNotificationResponse"
+                  operation="sendEmailNotification"/>
+        </sequence>
+      </scope>
     </scope>
   </sequence>
 </process>
